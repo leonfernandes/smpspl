@@ -64,16 +64,16 @@ fit_splits.model_spec <- function(
         settings_tbl |>
         dplyr::group_by(analysis_idx) |>
         dplyr::summarise(
-            obj_fit = list(
+            .fit = list(
                 generics::fit(
                     object,
                     formula,
                     vctrs::vec_slice(data, 1:analysis_idx[1])
                 )
             ),
-            obj_resids = list(
+            .resids = list(
                 autoresid::autoresid(
-                    obj_fit[[1]],
+                    .fit[[1]],
                     data,
                     y_nm
                 )
@@ -82,10 +82,10 @@ fit_splits.model_spec <- function(
     res <- settings_tbl |>
         dplyr::left_join(fitted_tbl, by = dplyr::join_by("analysis_idx")) |>
         dplyr::mutate(
-            .predictions = purrr::map(
+            .resids = purrr::map(
                 assessment_idx, ~ vctrs::vec_slice(
-                    obj_resids[[1]],
-                    vctrs::vec_size(obj_resids[[1]]) - .x + 1:.x
+                    .resids[[1]],
+                    vctrs::vec_size(.resids[[1]]) - .x + 1:.x
                 )
             )
         )
@@ -93,11 +93,13 @@ fit_splits.model_spec <- function(
         res <-
             res |>
             dplyr::mutate(
+                temp = 0,
                 .metrics = purrr::map(
-                    .predictions,
-                    ~ metrics(.x, truth = !!rlang::sym(y_nm), estimate = .pred)
+                    .resids,
+                    ~ metrics(.x, truth = !!rlang::sym(y_nm), estimate = temp)
                 )
-            )
+            ) |>
+            dplyr::select(-temp)
     }
     tibble::new_tibble(res, "smp_spl_results")
 }
@@ -151,15 +153,15 @@ fit_splits_impl_workflow <- function(
         settings_tbl |>
         dplyr::group_by(analysis_idx) |>
         dplyr::summarise(
-            obj_fit = list(
+            .fit = list(
                 generics::fit(
                     object,
                     vctrs::vec_slice(data, 1:analysis_idx[1])
                 )
             ),
-            obj_resids = list(
+            .resids = list(
                 autoresid::autoresid(
-                    obj_fit[[1]],
+                    .fit[[1]],
                     data,
                     y_nm
                 )
@@ -168,10 +170,10 @@ fit_splits_impl_workflow <- function(
     res <- settings_tbl |>
         dplyr::left_join(fitted_tbl, by = dplyr::join_by("analysis_idx")) |>
         dplyr::mutate(
-            .predictions = purrr::map(
+            .resids = purrr::map(
                 assessment_idx, ~ vctrs::vec_slice(
-                    obj_resids[[1]],
-                    vctrs::vec_size(obj_resids[[1]]) - .x + 1:.x
+                    .resids[[1]],
+                    vctrs::vec_size(.resids[[1]]) - .x + 1:.x
                 )
             )
         )
@@ -179,11 +181,13 @@ fit_splits_impl_workflow <- function(
         res <-
             res |>
             dplyr::mutate(
+                temp = 0,
                 .metrics = purrr::map(
-                    .predictions,
-                    ~ metrics(.x, truth = !!rlang::sym(y_nm), estimate = .pred)
+                    .resids,
+                    ~ metrics(.x, truth = !!rlang::sym(y_nm), estimate = temp)
                 )
-            )
+            ) |>
+            dplyr::select(-temp)
     }
     tibble::new_tibble(res, "smp_spl_results")
 }
