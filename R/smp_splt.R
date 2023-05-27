@@ -72,8 +72,10 @@ fit_splits.model_spec <- function(
                 )
             ),
             obj_resids = list(
-                stats::residuals(
-                    obj_fit[[1]]
+                autoresid::autoresid(
+                    obj_fit[[1]],
+                    data,
+                    y_nm
                 )
             )
         )
@@ -156,8 +158,10 @@ fit_splits_impl_workflow <- function(
                 )
             ),
             obj_resids = list(
-                stats::residuals(
-                    obj_fit[[1]]
+                autoresid::autoresid(
+                    obj_fit[[1]],
+                    data,
+                    y_nm
                 )
             )
         )
