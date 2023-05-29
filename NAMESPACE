@@ -3,4 +3,5 @@
 S3method(fit_splits,model_spec)
 S3method(fit_splits,workflow)
 export(fit_splits)
+export(fit_splits_list)
 export(tune_metrics)
