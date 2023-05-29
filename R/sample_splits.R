@@ -29,7 +29,7 @@ sample_splits <- function(data, num_analysis, num_assessment) {
         dplyr::filter(analysis_idx + assessment_idx >= n) |>
         # make id column
         dplyr::mutate(
-            id = paste0(
+            split_id = paste0(
                 "split", stringr::str_pad(dplyr::row_number(), 2, pad = 0)
             )
         )
