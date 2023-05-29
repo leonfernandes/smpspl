@@ -7,6 +7,7 @@ fit_splits_list <-
     function(
         object,
         data,
+        formula = NULL,
         num_analysis,
         num_assessment,
         use_fit_resamples = FALSE,
@@ -19,6 +20,7 @@ fit_splits_list <-
             purrr::map(\(obj) fit_splits(
                 object = obj,
                 data = data,
+                formula = formula,
                 num_analysis = num_analysis,
                 num_assessment = num_assessment,
                 use_fit_resamples = use_fit_resamples,

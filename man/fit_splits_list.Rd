@@ -7,6 +7,7 @@
 fit_splits_list(
   object,
   data,
+  formula = NULL,
   num_analysis,
   num_assessment,
   use_fit_resamples = FALSE,
@@ -20,6 +21,9 @@ fit_splits_list(
 
 \item{data}{A data frame of predictors and outcomes to use when fitting the
 workflow.}
+
+\item{formula}{An object of class `formula`` (or one that can be coerced to
+that class): a symbolic description of the model to be fitted.}
 
 \item{num_analysis}{A positive integer specifying number of observations for
 analysis.}
