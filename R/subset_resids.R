@@ -9,8 +9,9 @@
 #'      residuals.
 #' @param size_col single character string. Column name corresponding to number
 #'      of residuals to be subset from the tail.
+#' @inheritParams fit_splits
 #' @export
-subset_resids <- function(object, resid_col, size_col) {
+subset_resids <- function(object, resid_col, size_col, metrics = NULL) {
     resid_col <- rlang::enquo(resid_col)
     resid_data <-
         object |>
@@ -31,6 +32,9 @@ subset_resids <- function(object, resid_col, size_col) {
     res <-
         object |>
         dplyr::mutate(.resid = res_list)
+    if (!is.null(metrics)) {
+        res <- tune_metrics(res, metrics)
+    }
     class(res) <- c("sub_resids_tbl", class(res))
     return(res)
 }

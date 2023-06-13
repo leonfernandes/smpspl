@@ -4,7 +4,7 @@
 \alias{subset_resids}
 \title{Subsets tail of residuals}
 \usage{
-subset_resids(object, resid_col, size_col)
+subset_resids(object, resid_col, size_col, metrics = NULL)
 }
 \arguments{
 \item{object}{a tibble.}
@@ -14,6 +14,9 @@ residuals.}
 
 \item{size_col}{single character string. Column name corresponding to number
 of residuals to be subset from the tail.}
+
+\item{metrics}{A \code{\link[yardstick:metric_set]{yardstick::metric_set()}}, or \code{NULL} to compute a standard
+set of metrics.}
 }
 \description{
 Helper function to subset a list-column of residuals \code{resid_col} based on

@@ -34,8 +34,5 @@ fit_splits.model_spec <- function(
         dplyr::left_join(fitted_tbl, by = dplyr::join_by("analysis_idx")) |>
         subset_resids(".resid", "assessment_idx")
     class(res) <- c("smp_spl_tbl", class(res))
-    if (!is.null(metrics)) {
-        res <- tune_metrics(res, metrics)
-    }
     res
 }

@@ -5,6 +5,7 @@
 #'      analysis.
 #' @param num_assessment positive integer specifying number of observations for
 #'      goodness-of-fit tests.
+#' @export
 #' @returns An object of class `smp_spl`.
 sample_splits <- function(data, num_analysis, num_assessment) {
     n <- vctrs::vec_size(data)

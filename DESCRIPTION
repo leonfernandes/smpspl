@@ -1,6 +1,6 @@
 Package: smpspl
 Title: Sample Splitting
-Version: 0.0.1.9008
+Version: 0.0.1.9009
 Authors@R: 
     person("Leon", "Fernandes", , "leon.fernandes@columbia.edu", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-7192-9939"))
