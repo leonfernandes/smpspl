@@ -78,9 +78,10 @@ fit_splits_impl_workflow <- function(
         dplyr::left_join(fitted_tbl, by = dplyr::join_by("analysis_idx")) |>
         dplyr::mutate(
             .resids = purrr::map(
-                assessment_idx, ~ vctrs::vec_slice(
-                    .resids[[1]],
-                    vctrs::vec_size(.resids[[1]]) - .x + 1:.x
+                seq_along(assessment_idx), ~ vctrs::vec_slice(
+                    .resids[[.x]],
+                    vctrs::vec_size(.resids[[1]]) -
+                        assessment_idx[.x] + 1:assessment_idx[.x]
                 )
             )
         )
