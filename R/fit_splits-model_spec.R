@@ -22,7 +22,7 @@ fit_splits.model_spec <- function(
                     vctrs::vec_slice(data, 1:analysis_idx[1])
                 )
             ),
-            .resids = list(
+            .resid = list(
                 autoresid::autoresid(
                     .fit[[1]],
                     data,
@@ -32,15 +32,7 @@ fit_splits.model_spec <- function(
         )
     res <- settings_tbl |>
         dplyr::left_join(fitted_tbl, by = dplyr::join_by("analysis_idx")) |>
-        dplyr::mutate(
-            .resids = purrr::map(
-                seq_along(assessment_idx), ~ vctrs::vec_slice(
-                    .resids[[.x]],
-                    vctrs::vec_size(.resids[[1]]) -
-                        assessment_idx[.x] + 1:assessment_idx[.x]
-                )
-            )
-        )
+        subset_resids(".resid", "assessment_idx")
     class(res) <- c("smp_spl_tbl", class(res))
     if (!is.null(metrics)) {
         res <- tune_metrics(res, metrics)
