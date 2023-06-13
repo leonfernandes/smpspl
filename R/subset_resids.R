@@ -15,26 +15,27 @@ subset_resids <- function(object, resid_col, size_col, metrics = NULL) {
     resid_col <- rlang::enquo(resid_col)
     resid_data <-
         object |>
-        dplyr::pull(!!resid_col)
+        dplyr::select(!!resid_col)
     size_col <- rlang::enquo(size_col)
     size_data <-
         object |>
         dplyr::pull(!!size_col)
     res_list <-
-        seq_along(resid_data) |>
+        seq_along(size_data) |>
         purrr::map(
             ~ vctrs::vec_slice(
-                resid_data[[.x]],
-                vctrs::vec_size(resid_data[[.x]]) - size_data[.x] +
+                vctrs::vec_slice(resid_data, .x)[[1]][[1]],
+                vctrs::vec_size(vctrs::vec_slice(resid_data, .x)[[1]][[1]]) -
+                    size_data[.x] +
                     1:size_data[.x]
             )
         )
     res <-
         object |>
         dplyr::mutate(.resid = res_list)
+    class(res) <- c("resids_tbl", class(res))
     if (!is.null(metrics)) {
         res <- tune_metrics(res, metrics)
     }
-    class(res) <- c("sub_resids_tbl", class(res))
     return(res)
 }

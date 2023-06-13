@@ -9,8 +9,9 @@ tune_metrics(object, metric_list)
 \arguments{
 \item{object}{a tibble of class \code{smp_spl_results}}
 
-\item{metric_list}{a list of metrics to be evaluate \code{.resids}}
+\item{metric_list}{a list of metrics to evaluate independence of \code{.resid}}
 }
 \description{
-Calculate metrics
+Assumes each row of \code{.resid} list-column is a tibble with also contains a
+column \code{.resid}.
 }
