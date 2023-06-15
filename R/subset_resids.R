@@ -11,31 +11,32 @@
 #'      of residuals to be subset from the tail.
 #' @inheritParams fit_splits
 #' @export
-subset_resids <- function(object, resid_col, size_col, metrics = NULL) {
-    resid_col <- rlang::enquo(resid_col)
-    resid_data <-
-        object |>
-        dplyr::select(!!resid_col)
-    size_col <- rlang::enquo(size_col)
-    size_data <-
-        object |>
-        dplyr::pull(!!size_col)
-    res_list <-
-        seq_along(size_data) |>
-        purrr::map(
-            ~ vctrs::vec_slice(
-                vctrs::vec_slice(resid_data, .x)[[1]][[1]],
-                vctrs::vec_size(vctrs::vec_slice(resid_data, .x)[[1]][[1]]) -
-                    size_data[.x] +
-                    1:size_data[.x]
+subset_resids <-
+    function(object, resid_col, size_col, metrics = NULL) {
+        resid_col <- rlang::enquo(resid_col)
+        resid_data <-
+            object |>
+            dplyr::select(!!resid_col)
+        size_col <- rlang::enquo(size_col)
+        size_data <-
+            object |>
+            dplyr::pull(!!size_col)
+        res_list <-
+            seq_along(size_data) |>
+            purrr::map(
+                ~ vctrs::vec_slice(
+                    vctrs::vec_slice(resid_data, .x)[[1]][[1]],
+                    vctrs::vec_size(vctrs::vec_slice(resid_data, .x)[[1]][[1]]) -
+                        size_data[.x] +
+                        1:size_data[.x]
+                )
             )
-        )
-    res <-
-        object |>
-        dplyr::mutate(.resid = res_list)
-    class(res) <- c("resids_tbl", class(res))
-    if (!is.null(metrics)) {
-        res <- tune_metrics(res, metrics)
+        res <-
+            object |>
+            dplyr::mutate(.resid = res_list)
+        class(res) <- c("resids_tbl", class(res))
+        if (!is.null(metrics)) {
+            res <- tune_metrics(res, metrics)
+        }
+        return(res)
     }
-    return(res)
-}
