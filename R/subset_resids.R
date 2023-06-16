@@ -36,7 +36,7 @@ subset_resids <-
             dplyr::mutate(.resid = res_list)
         class(res) <- c("resids_tbl", class(res))
         if (!is.null(metrics)) {
-            res <- tune_metrics(res, metrics)
+            res <- calibrate_metrics(res, metrics)
         }
         return(res)
     }

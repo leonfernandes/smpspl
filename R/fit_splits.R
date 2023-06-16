@@ -12,7 +12,6 @@
 #'      analysis.
 #' @param num_assessment A positive integer specifying number of observations
 #'      for goodness-of-fit tests.
-#' @param use_fit_resamples  If `TRUE`, uses [tune::fit_resamples()].
 #' @param formula An object of class `formula`` (or one that can be coerced to
 #'      that class): a symbolic description of the model to be fitted.
 #' @export
