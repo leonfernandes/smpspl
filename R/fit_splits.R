@@ -12,7 +12,7 @@
 #'      analysis.
 #' @param num_assessment A positive integer specifying number of observations
 #'      for goodness-of-fit tests.
-#' @param formula An object of class `formula`` (or one that can be coerced to
+#' @param formula An object of class `formula` (or one that can be coerced to
 #'      that class): a symbolic description of the model to be fitted.
 #' @export
 fit_splits <- function(object, ...) {
