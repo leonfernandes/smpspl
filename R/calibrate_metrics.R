@@ -6,9 +6,11 @@
 #' @param object a tibble of class `smp_spl_results`
 #' @param metric_list a list of metrics to evaluate independence of `.resid`
 #' @export
-tune_metrics <-
+calibrate_metrics <-
     function(object, metric_list) {
-        if (!inherits(object, "resids_tbl")) stop("Unrecognized `object`.")
+        if (!inherits(object, "resids_tbl")) rlang::abort(
+            "Unrecognized `object`."
+        )
         ret <-
             object |>
             # for each .resid column, calculate listed metrics
