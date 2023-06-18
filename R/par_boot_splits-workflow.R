@@ -1,4 +1,5 @@
 #' @rdname par_boot_splits
+#' @export
 par_boot_splits.workflow <-
     function(
         object,

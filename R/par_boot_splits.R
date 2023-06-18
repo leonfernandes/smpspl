@@ -10,6 +10,7 @@
 #' @param quantiles vector of probabalities at which quantiles of metrics are
 #'      calculated.
 #' @param burn_in positive integer. Number of residuals used for burn-in.
+#' @export
 par_boot_splits <-
     function(object, ...) {
         UseMethod("par_boot_splits")

@@ -1,6 +1,7 @@
 #' @rdname par_boot_splits
 #' @param formula An object of class `formula` (or one that can be coerced to
 #'      that class): a symbolic description of the model to be fitted.
+#' @export
 par_boot_splits.model_spec <-
     function(
         object,
