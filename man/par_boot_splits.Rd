@@ -68,6 +68,5 @@ set of metrics.}
 process.}
 }
 \description{
-Yields parametric bootstrapped metrics for specified sample splits. Parallel
-computing is implemented using \code{furrr::future_map}.
+Yields parametric bootstrapped metrics for specified sample splits.
 }
