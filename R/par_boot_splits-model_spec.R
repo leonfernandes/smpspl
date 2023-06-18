@@ -94,5 +94,5 @@ par_boot_splits.model_spec <-
             dplyr::reframe(
                 value = quantile_df(value, probs = quantiles)
             ) |>
-            tidyr::unnest()
+            tidyr::unnest(value)
     }
