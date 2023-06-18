@@ -1,6 +1,7 @@
 #' Parametric bootstrap quantiles
 #'
-#' Yields parametric bootstrapped metrics for specified sample splits.
+#' Yields parametric bootstrapped metrics for specified sample splits. Parallel
+#' computing is implemented using `furrr::future_map`.
 #' @inheritParams fit_splits
 #' @param object either of class `model_spec` or `workflow`. The fitted object
 #'      should have `simts::simts` method implemented.

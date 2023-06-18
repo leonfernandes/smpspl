@@ -25,7 +25,7 @@ par_boot_splits.workflow <-
                 outcome = tune::outcome_names(object)
             )
         bootstrapped_metrics <-
-            purrr::map(
+            furrr::future_map(
                 1:num_resamples,
                 function(.) {
                     new_resids <-
