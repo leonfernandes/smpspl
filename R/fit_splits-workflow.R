@@ -10,7 +10,7 @@ fit_splits.workflow <-
         metrics = NULL,
         control = tune::control_resamples()
     ) {
-        y_nm <- tune::outcome_names(formula)
+        y_nm <- tune::outcome_names(object)
         settings_tbl <- sample_splits(data, num_analysis, num_assessment)
         fitted_tbl <-
             settings_tbl |>

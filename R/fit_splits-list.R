@@ -10,7 +10,6 @@ fit_splits_list <-
         formula = NULL,
         num_analysis,
         num_assessment,
-        use_fit_resamples = FALSE,
         ...,
         metrics = NULL,
         control = tune::control_resamples()
@@ -23,7 +22,6 @@ fit_splits_list <-
                 formula = formula,
                 num_analysis = num_analysis,
                 num_assessment = num_assessment,
-                use_fit_resamples = use_fit_resamples,
                 ... = ...,
                 metrics = metrics,
                 control = control

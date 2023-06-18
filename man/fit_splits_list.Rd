@@ -10,7 +10,6 @@ fit_splits_list(
   formula = NULL,
   num_analysis,
   num_assessment,
-  use_fit_resamples = FALSE,
   ...,
   metrics = NULL,
   control = tune::control_resamples()
@@ -22,7 +21,7 @@ fit_splits_list(
 \item{data}{A data frame of predictors and outcomes to use when fitting the
 workflow.}
 
-\item{formula}{An object of class `formula`` (or one that can be coerced to
+\item{formula}{An object of class \code{formula} (or one that can be coerced to
 that class): a symbolic description of the model to be fitted.}
 
 \item{num_analysis}{A positive integer specifying number of observations for
@@ -30,8 +29,6 @@ analysis.}
 
 \item{num_assessment}{A positive integer specifying number of observations
 for goodness-of-fit tests.}
-
-\item{use_fit_resamples}{If \code{TRUE}, uses \code{\link[tune:fit_resamples]{tune::fit_resamples()}}.}
 
 \item{...}{Currently unused.}
 
