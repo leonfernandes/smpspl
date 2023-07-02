@@ -52,47 +52,16 @@ par_boot_splits.model_spec <-
                             metrics = metrics,
                             control = control
                         ) |>
-                        dplyr::select(analysis_idx, .metrics) |>
-                        dplyr::mutate(
-                            .metrics = purrr::map(
-                                .metrics, ~ purrr::list_cbind(.x)
-                            )
-                        )
+                        dplyr::select(analysis_idx, .metric) |>
+                        tidyr::unnest(".metric")
                     ret
                 }
             ) |>
             purrr::list_rbind(names_to = "boot_id")
         bootstrapped_metrics |>
-            # add list-column of combined metrics
-            dplyr::mutate(
-                comb_met = purrr::map(
-                    .metrics,
-                    ~ purrr::reduce(
-                        # join metrics by lag
-                        .x,
-                        \(a, b) dplyr::inner_join(
-                            a, b, by = dplyr::join_by("lag")
-                        )
-                    ) |>
-                    # pivot metrics and form long tibble
-                    tidyr::pivot_longer(
-                        cols = -lag,
-                        names_to = "metric"
-                    ) |>
-                    # encode metric as factor
-                    dplyr::mutate(
-                        metric = factor(metric)
-                    )
-                )
-            ) |>
-            # for each analysis_idx, convert list-columns to columns
-            dplyr::group_by(analysis_idx) |>
-            dplyr::reframe(long_metric = purrr::list_rbind(comb_met)) |>
-            tidyr::unnest(long_metric) |>
             # for each setting, calculate respective quantiles
-            dplyr::group_by(analysis_idx, lag, metric) |>
+            dplyr::group_by(analysis_idx, .metric, lag) |>
             dplyr::reframe(
-                value = quantile_df(value, probs = quantiles)
-            ) |>
-            tidyr::unnest(value)
+                quantile_df(.estimate, probs = quantiles)
+            )
     }
