@@ -59,3 +59,14 @@ Fits model according to sample splitting on a grid of values determined by
 \code{num_analysis} and \code{num_assessment}, where each tuple determines the number
 of analysis and assessment sets.
 }
+\examples{
+library(dplyr)
+library(parsnip)
+library(modeltime)
+data <- data.frame(x = rnorm(10), date = Sys.Date() + 0:9)
+# Consider a arima model
+arima_spec <-
+     arima_reg() |>
+     set_engine("arima")
+fit_splits(arima_spec, x ~ date, data, 2, 2)
+}

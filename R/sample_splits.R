@@ -31,9 +31,12 @@ sample_splits <-
             dplyr::filter(analysis_idx + assessment_idx >= n) |>
             # make id column
             dplyr::mutate(
-                split_id = paste0(
-                    "split", stringr::str_pad(dplyr::row_number(), 2, pad = 0)
-                )
+                split_id =
+                    "split" |>
+                    paste0(
+                    stringr::str_pad(dplyr::row_number(), 2, pad = 0)
+                    ) |>
+                    factor()
             )
         tibble::new_tibble(settings_tbl, "smp_spl")
     }

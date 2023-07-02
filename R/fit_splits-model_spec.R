@@ -1,5 +1,15 @@
 #' @rdname fit_splits
 #' @export
+#' @examples
+#' library(dplyr)
+#' library(parsnip)
+#' library(modeltime)
+#' data <- data.frame(x = rnorm(10), date = Sys.Date() + 0:9)
+#' # Consider a arima model
+#' arima_spec <-
+#'      arima_reg() |>
+#'      set_engine("arima")
+#' fit_splits(arima_spec, x ~ date, data, 2, 2)
 fit_splits.model_spec <-
     function(
         object,

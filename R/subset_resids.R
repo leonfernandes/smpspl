@@ -26,7 +26,9 @@ subset_resids <-
             purrr::map(
                 ~ vctrs::vec_slice(
                     vctrs::vec_slice(resid_data, .x)[[1]][[1]],
-                    vctrs::vec_size(vctrs::vec_slice(resid_data, .x)[[1]][[1]]) -
+                    vctrs::vec_size(
+                        vctrs::vec_slice(resid_data, .x)[[1]][[1]]
+                    ) -
                         size_data[.x] +
                         1:size_data[.x]
                 )
@@ -36,7 +38,14 @@ subset_resids <-
             dplyr::mutate(.resid = res_list)
         class(res) <- c("resids_tbl", class(res))
         if (!is.null(metrics)) {
-            res <- calibrate_metrics(res, metrics)
+            res <-
+                res |>
+                dplyr::mutate(
+                    .metric = purrr::map(
+                        .resid,
+                        ~ lanyard::calibrate_metrics(.x, ".resid", metrics)
+                    )
+                )
         }
         return(res)
     }
