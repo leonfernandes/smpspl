@@ -4,7 +4,7 @@
 #' `size_col`. The subset column will have name `.resid`; note that this
 #' overwrites any exisiting column of the same name.
 #'
-#' @param object a tibble.
+#' @param object a [tsibble][tsibble::tsibble-package].
 #' @param resid_col single character string. Column name corresponding to
 #'      residuals.
 #' @param size_col single character string. Column name corresponding to number
@@ -36,7 +36,7 @@ subset_resids <-
         res <-
             object |>
             dplyr::mutate(.resid = res_list)
-        class(res) <- c("resids_tbl", class(res))
+        class(res) <- c("resids_ts", class(res))
         if (!is.null(metrics)) {
             res <-
                 res |>

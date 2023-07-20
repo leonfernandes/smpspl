@@ -11,7 +11,8 @@ fit_splits.workflow <-
         control = tune::control_resamples()
     ) {
         y_nm <- tune::outcome_names(object)
-        settings_tbl <- sample_splits(data, num_analysis, num_assessment)
+        settings_tbl <-
+            sample_splits(vctrs::vec_size(data), num_analysis, num_assessment)
         fitted_tbl <-
             settings_tbl |>
             dplyr::group_by(analysis_idx) |>

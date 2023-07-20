@@ -63,7 +63,7 @@ of analysis and assessment sets.
 library(dplyr)
 library(parsnip)
 library(modeltime)
-data <- data.frame(x = rnorm(10), date = Sys.Date() + 0:9)
+data <- tsibble::tsibble(x = rnorm(100), date = Sys.Date() + 0:99, index = date)
 # Consider a arima model
 arima_spec <-
      arima_reg() |>

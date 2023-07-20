@@ -4,7 +4,7 @@
 #' library(dplyr)
 #' library(parsnip)
 #' library(modeltime)
-#' data <- data.frame(x = rnorm(10), date = Sys.Date() + 0:9)
+#' data <- tsibble::tsibble(x = rnorm(100), date = Sys.Date() + 0:99, index = date)
 #' # Consider a arima model
 #' arima_spec <-
 #'      arima_reg() |>
@@ -22,7 +22,8 @@ fit_splits.model_spec <-
         control = tune::control_resamples()
     ) {
         y_nm <- tune::outcome_names(formula)
-        settings_tbl <- sample_splits(data, num_analysis, num_assessment)
+        settings_tbl <-
+            sample_splits(vctrs::vec_size(data), num_analysis, num_assessment)
         fitted_tbl <-
             settings_tbl |>
             dplyr::group_by(analysis_idx) |>

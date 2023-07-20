@@ -4,10 +4,10 @@
 \alias{sample_splits}
 \title{Creates sample splits}
 \usage{
-sample_splits(data, num_analysis, num_assessment)
+sample_splits(n, num_analysis, num_assessment)
 }
 \arguments{
-\item{data}{A data frame of predictors and outcomes.}
+\item{n}{Number of terms to sample split.}
 
 \item{num_analysis}{positive integer specifying number of observations for
 analysis.}

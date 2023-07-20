@@ -1,6 +1,6 @@
 #' Creates sample splits
 #'
-#' @param data A data frame of predictors and outcomes.
+#' @param n Number of terms to sample split.
 #' @param num_analysis positive integer specifying number of observations for
 #'      analysis.
 #' @param num_assessment positive integer specifying number of observations for
@@ -8,8 +8,7 @@
 #' @export
 #' @returns An object of class `smp_spl`.
 sample_splits <-
-    function(data, num_analysis, num_assessment) {
-        n <- vctrs::vec_size(data)
+    function(n, num_analysis, num_assessment) {
         # Make vectors of analysis and assessment splits
         analysis_idx <- seq(
             n / num_analysis, n,
@@ -26,17 +25,6 @@ sample_splits <-
             tidyr::expand_grid(
                 analysis_idx = analysis_idx,
                 assessment_idx = assessment_idx
-            ) |>
-            # remove settings which don't use all the data
-            dplyr::filter(analysis_idx + assessment_idx >= n) |>
-            # make id column
-            dplyr::mutate(
-                split_id =
-                    "split" |>
-                    paste0(
-                    stringr::str_pad(dplyr::row_number(), 2, pad = 0)
-                    ) |>
-                    factor()
             )
         tibble::new_tibble(settings_tbl, "smp_spl")
     }

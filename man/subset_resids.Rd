@@ -7,7 +7,7 @@
 subset_resids(object, resid_col, size_col, metrics = NULL)
 }
 \arguments{
-\item{object}{a tibble.}
+\item{object}{a \link[tsibble:tsibble-package]{tsibble}.}
 
 \item{resid_col}{single character string. Column name corresponding to
 residuals.}
