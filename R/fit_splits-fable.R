@@ -10,10 +10,14 @@
 #' @examples
 #' library(fable)
 #' data <-
-#'      tsibble::tsibble(value = rnorm(100), date = Sys.Date() + 0:99, index = date)
-#' # Consider an ARMA(1, 1) model
-#' #data |>
-#' #     fit_splits(model_dfn = ARIMA(value ~ pdq(1, 0, 1)), 2, 2)
+#'      tsibble::tsibble(
+#'          value = rnorm(100), date = Sys.Date() + 0:99, index = date
+#'      )
+#' # Consider an AR(1) model
+#' data |>
+#'      fit_splits_tbl_ts(
+#'          .model = ARIMA(value ~ pdq(1, 0, 0) + PDQ(0, 0, 0)), 2, 2
+#'      )
 fit_splits_tbl_ts <-
     function(
         .data,
@@ -24,6 +28,7 @@ fit_splits_tbl_ts <-
     ) {
         analysis_idx <- rlang::sym("analysis_idx")
         .fit <- rlang::sym(".fit")
+        .resid <- rlang::sym(".resid")
         num_sim <- vctrs::vec_size(.data)
         settings_tbl <-
             sample_splits_tbl_ts(
@@ -46,13 +51,34 @@ fit_splits_tbl_ts <-
                 fitted_mdl |>
                     autoresid::autoresid(new_data = .data)
             }
+        nested_mutate_tbl_ts <-
+            function(.data) {
+                .assessment <- rlang::sym(".assessment")
+                .data |>
+                    dplyr::mutate(
+                        .assessment = purrr::map2(
+                            .assessment,
+                            .resid,
+                            ~ dplyr::mutate(
+                                .x,
+                                .subresid = purrr::map(
+                                    assessment_idx,
+                                    \(ln) vctrs::vec_slice(
+                                        .y, num_sim - ln + 1:ln
+                                    )
+                                )
+                            )
+                        )
+                    )
+            }
         res <-
             settings_tbl |>
             dplyr::mutate(
                 .fit = purrr::map(analysis_idx, estimate_fn),
                 .resid = purrr::map(.fit, autoresid_fn)
             ) |>
-            nested_mutate_tbl_ts()
+            nested_mutate_tbl_ts() |>
+            dplyr::select(-c(.fit, .resid))
         class(res) <- c("smp_spl_tbl", class(res))
         res
     }
@@ -77,24 +103,4 @@ sample_splits_tbl_ts <-
             ) |>
             tidyr::nest(.assessment = assessment_idx)
         tibble::new_tibble(settings_tbl, "smp_spl_nest")
-    }
-
-nested_mutate_tbl_ts <-
-    function(.data) {
-        .assessment <- rlang::sym(".assessment")
-        .data |>
-            dplyr::mutate(
-                .assessment = purrr::map(
-                    .assessment,
-                    ~ dplyr::mutate(
-                        .x,
-                        .subresid = purrr::map(
-                            assessment_idx,
-                            \(ln) vctrs::vec_slice(
-                                .resid[[1]], num_sim - ln + 1:ln
-                            )
-                        )
-                    )
-                )
-            )
     }

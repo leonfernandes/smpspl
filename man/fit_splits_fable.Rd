@@ -25,8 +25,12 @@ Fit multiple sample splits to fable models
 \examples{
 library(fable)
 data <-
-     tsibble::tsibble(value = rnorm(100), date = Sys.Date() + 0:99, index = date)
-# Consider an ARMA(1, 1) model
-#data |>
-#     fit_splits(model_dfn = ARIMA(value ~ pdq(1, 0, 1)), 2, 2)
+     tsibble::tsibble(
+         value = rnorm(100), date = Sys.Date() + 0:99, index = date
+     )
+# Consider an AR(1) model
+data |>
+     fit_splits_tbl_ts(
+         .model = ARIMA(value ~ pdq(1, 0, 0) + PDQ(0, 0, 0)), 2, 2
+     )
 }
