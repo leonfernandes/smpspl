@@ -1,15 +1,11 @@
 #' Creates sample splits
 #'
 #' @param n Number of terms to sample split.
-#' @param num_analysis positive integer specifying number of observations for
-#'      analysis.
-#' @param num_assessment positive integer specifying number of observations for
-#'      goodness-of-fit tests.
+#' @inherit smpspl_grid
 #' @export
-#' @returns An object of class `smp_spl`.
+#' @returns An object of class `grid_tbl`.
 sample_splits <-
     function(n, num_analysis, num_assessment) {
-        # Make vectors of analysis and assessment splits
         analysis_idx <- seq(
             n / num_analysis, n,
             length.out = num_analysis
@@ -25,6 +21,7 @@ sample_splits <-
             tidyr::expand_grid(
                 analysis_idx = analysis_idx,
                 assessment_idx = assessment_idx
-            )
-        tibble::new_tibble(settings_tbl, "smp_spl")
+            ) |>
+            tidyr::nest(.assessment = assessment_idx)
+        tibble::new_tibble(settings_tbl, "grid_tbl")
     }
