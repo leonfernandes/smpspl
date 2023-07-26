@@ -35,6 +35,10 @@ resample.}
 
 \item{...}{Additional arguments needed to fit the data such as formula.}
 }
+\value{
+a \link[tsibble:tsibble-package]{tsibble} of bootstrap resampled
+residuals.
+}
 \description{
 Bootstrapped Sample Split Residuals
 }

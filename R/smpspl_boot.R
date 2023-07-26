@@ -5,6 +5,8 @@
 #' @param resample_size positive integer. Number of residuals per bootstrap
 #'      resample.
 #' @param burn_in positive integer. Number of residuals used for burn-in.
+#' @returns a [tsibble][tsibble::tsibble-package] of bootstrap resampled
+#'      residuals.
 #' @export
 smpspl_boot <-
     function(
@@ -51,5 +53,10 @@ smpspl_boot <-
                     object, new_data, f_n = resample_size, l_n = resample_size
                 )
             }
-        purrr::map(1:num_resamples, get_new_resids)
+        ret <-
+            purrr::map(1:num_resamples, get_new_resids)
+        ret_index <- tsibble::index(ret[[1]])
+        ret |>
+            purrr::list_rbind(names_to = "boot_id") |>
+            tsibble::as_tsibble(index = ret_index, key = "boot_id")
     }
