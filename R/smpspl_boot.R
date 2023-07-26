@@ -15,15 +15,15 @@ smpspl_boot <-
             rlang::abort(
                 glue::glue(
                     'Cannot sample a total of {resample_size + burn_in} rows',
-                    'from a maximum of {l_n} rows.'
+                    ' from a maximum of {l_n} rows.'
                 )
             )
         } else if (l_n <= 2L * (resample_size + burn_in)) {
             rlang::inform(
                 glue::glue(
                     '{resample_size + burn_in} rows will be resampled from',
-                    '{l_n} rows. Consider reducing `resample_size` or ',
-                    '`burn_in` to control overlap.'
+                    ' {l_n} rows. Consider reducing `resample_size` or ',
+                    ' `burn_in` to control overlap.'
                 )
             )
         }
