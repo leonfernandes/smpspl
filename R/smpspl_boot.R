@@ -46,7 +46,7 @@ smpspl_boot <-
                     sample(resample_size + burn_in, replace = TRUE)
                 new_data <-
                     mdl |>
-                    simts::simts(nsim = resample_size, innov = new_resids)
+                    simults::simults(nsim = resample_size, innov = new_resids)
                 smpspl(
                     object, new_data, f_n = resample_size, l_n = resample_size
                 )
