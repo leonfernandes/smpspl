@@ -29,6 +29,7 @@ of analysis and assessment sets.
 \examples{
 library(fable)
 library(smpspltools)
+library(generics)
 data <-
      tsibble::tsibble(x = rnorm(100), date = Sys.Date() + 0:99, index = date)
 # Consider an AR(1) model
@@ -39,7 +40,8 @@ o <-
 my_acf <-
      function(x) {
          data.frame(t = x, e = 0) |>
-             lanyard::acf_metric(t, e)
+             lanyard::acf_metric(t, e) |>
+             tidy()
      }
 o |>
      features(.assessment, features = my_acf) |>
