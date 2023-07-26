@@ -93,7 +93,7 @@ smpspl_grid <-
                         )
                     )
             }
-        res <-
+        ret <-
             settings_tbl |>
             # fit models on `analysis_idx` and calculate residuals on all data
             dplyr::mutate(
@@ -101,7 +101,7 @@ smpspl_grid <-
                 .resid = purrr::map(.fit, autoresid_fn)
             ) |>
             # for each sample split get residuals
-            nested_mutate()
-        class(res) <- c("smpspl_grid", class(res))
-        return(res)
+            nested_mutate() |>
+            tibble::new_tibble(class = "smpspl_grid")
+        return(ret)
     }
