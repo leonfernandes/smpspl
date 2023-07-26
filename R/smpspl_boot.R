@@ -14,14 +14,14 @@ smpspl_boot <-
         if (l_n <= resample_size + burn_in) {
             rlang::warn(
                 glue::glue(
-                    "{resample size + burn_in} rows will be resampled from {l_n}
+                    "{resample_size + burn_in} rows will be resampled from {l_n}
                     rows."
                 )
             )
         } else if (l_n <= 2L * (resample_size + burn_in)) {
             rlang::inform(
                 glue::glue(
-                    "{resample size + burn_in} rows will be resampled from {l_n}
+                    "{resample_size + burn_in} rows will be resampled from {l_n}
                     rows. Consider reducing `resample_size` or `burn_in` to
                     control overlap."
                 )
