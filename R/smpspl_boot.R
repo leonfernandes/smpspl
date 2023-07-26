@@ -12,18 +12,18 @@ smpspl_boot <-
         ...
     ) {
         if (l_n <= resample_size + burn_in) {
-            rlang::warn(
+            rlang::abort(
                 glue::glue(
-                    "{resample_size + burn_in} rows will be resampled from {l_n}
-                    rows."
+                    'Cannot sample a total of {resample_size + burn_in} rows',
+                    'from a maximum of {l_n} rows.'
                 )
             )
         } else if (l_n <= 2L * (resample_size + burn_in)) {
             rlang::inform(
                 glue::glue(
-                    "{resample_size + burn_in} rows will be resampled from {l_n}
-                    rows. Consider reducing `resample_size` or `burn_in` to
-                    control overlap."
+                    '{resample_size + burn_in} rows will be resampled from',
+                    '{l_n} rows. Consider reducing `resample_size` or ',
+                    '`burn_in` to control overlap.'
                 )
             )
         }
@@ -47,7 +47,9 @@ smpspl_boot <-
                 new_data <-
                     mdl |>
                     simts::simts(nsim = resample_size, innov = new_resids)
-                smpspl(object, new_data, f_n, l_n)
+                smpspl(
+                    object, new_data, f_n = resample_size, l_n = resample_size
+                )
             }
         purrr::map(1:num_resamples, get_new_resids)
     }
