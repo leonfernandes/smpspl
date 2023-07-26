@@ -11,7 +11,7 @@ smpspl_list(model_list, fun, ...)
 
 \item{fun}{a \code{smpspl} function to be applied}
 
-\item{...}{parameters of \code{fun}}
+\item{...}{parameters other than "object" of \code{fun}}
 }
 \description{
 Convenient wrapper for iterating over a list of models. The first parameter
