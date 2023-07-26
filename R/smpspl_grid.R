@@ -12,6 +12,7 @@
 #' @export
 #' @examples
 #' library(fable)
+#' library(smpspltools)
 #' data <-
 #'      tsibble::tsibble(x = rnorm(100), date = Sys.Date() + 0:99, index = date)
 #' # Consider an AR(1) model
@@ -56,12 +57,12 @@ smpspl_grid <-
         estimate_fn <-
             # returns fitted model for aa given number of terms
             function(f_n) {
-                fit_model(
+                smpspltools::fit_model(
                     .object = object, .data = vctrs::vec_slice(data, 1:f_n),
                     ... = ...
                 )
             }
-        .outcome <- autoresid::extract_outcome(object, ...)
+        .outcome <- smpspltools::extract_outcome(object, ...)
         autoresid_fn <-
             # returns full residuals applied based on `data` for a fitted model
             function(fitted_mdl) {

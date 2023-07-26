@@ -27,6 +27,7 @@ Evaluates residuals of a model for a single sample split.
 }
 \examples{
 library(fable)
+library(smpspltools)
 data <-
      tsibble::tsibble(x = rnorm(100), date = Sys.Date() + 0:99, index = date)
 # Consider an AR(1) model
