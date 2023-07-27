@@ -52,6 +52,6 @@ smpspl_boot <-
             purrr::map(1:num_resamples, get_new_resids)
         ret |>
             purrr::list_rbind(names_to = "boot_id") |>
-            tsibble::as_tsibble(index = idx) |>
+            tsibble::as_tsibble(index = idx, key = "boot_id") |>
             tsibble::new_tsibble(class = "smpspl_boot")
     }
