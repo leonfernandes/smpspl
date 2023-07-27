@@ -20,7 +20,7 @@ smpspl_boot <-
                     ' from a maximum of {l_n} rows.'
                 )
             )
-        } else if (l_n <= 2L * (resample_size + burn_in)) {
+        } else if (0.6 * l_n <= resample_size + burn_in) {
             rlang::inform(
                 glue::glue(
                     '{resample_size + burn_in} rows will be resampled from',
@@ -45,7 +45,7 @@ smpspl_boot <-
             function(.) {
                 vctrs::vec_slice(
                     smpspl_resids,
-                    sample(1:n, resample_size + burn_in, replace = TRUE)
+                    sample(1:n, resample_size + burn_in, replace = FALSE)
                 )
             }
         ret <-
