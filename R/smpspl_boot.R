@@ -42,17 +42,14 @@ smpspl_boot <-
             tsibble::new_tsibble(class = "smpspl")
         get_new_resids <-
             function(.) {
-                new_resids <-
-                    smpspl_resids |>
-                    dplyr::pull(.resid) |>
-                    sample(resample_size + burn_in, replace = TRUE)
-                new_resids
+                vctrs::vec_slice(
+                    smpspl_resids,
+                    sample(1:n, resample_size + burn_in, replace = TRUE)
+                )
             }
         ret <-
             purrr::map(1:num_resamples, get_new_resids)
-        ret_index <- tsibble::index(ret[[1]])
         ret |>
             purrr::list_rbind(names_to = "boot_id") |>
-            tsibble::as_tsibble(index = ret_index, key = "boot_id") |>
             tsibble::new_tsibble(class = "smpspl_boot")
     }
