@@ -46,12 +46,7 @@ smpspl_boot <-
                     smpspl_resids |>
                     dplyr::pull(.resid) |>
                     sample(resample_size + burn_in, replace = TRUE)
-                new_data <-
-                    mdl |>
-                    simults::simults(nsim = resample_size, innov = new_resids)
-                smpspl(
-                    object, new_data, f_n = resample_size, l_n = resample_size
-                )
+                new_resids
             }
         ret <-
             purrr::map(1:num_resamples, get_new_resids)
