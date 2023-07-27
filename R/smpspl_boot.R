@@ -40,6 +40,7 @@ smpspl_boot <-
             autoresid::autoresid(new_data = data, outcome = .outcome) |>
             vctrs::vec_slice(n - l_n + 1:l_n) |>
             tsibble::new_tsibble(class = "smpspl")
+        idx <- tsibble::index(smpspl_resids)
         get_new_resids <-
             function(.) {
                 vctrs::vec_slice(
@@ -51,5 +52,6 @@ smpspl_boot <-
             purrr::map(1:num_resamples, get_new_resids)
         ret |>
             purrr::list_rbind(names_to = "boot_id") |>
+            tsibble::as_tsibble(index = idx) |>
             tsibble::new_tsibble(class = "smpspl_boot")
     }
