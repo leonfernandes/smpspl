@@ -2,33 +2,13 @@
 #'
 #' @inheritParams smpspl
 #' @param num_resamples positive integer. Number of bootstrap resamples.
-#' @param resample_size positive integer. Number of residuals per bootstrap
-#'      resample.
-#' @param burn_in positive integer. Number of residuals used for burn-in.
 #' @returns a [tsibble][tsibble::tsibble-package] of bootstrap resampled
 #'      residuals.
 #' @export
 smpspl_boot <-
     function(
-        object, data, f_n, l_n, num_resamples, resample_size, burn_in = 200L,
-        ...
+        object, data, f_n, l_n, num_resamples, ...
     ) {
-        if (l_n <= resample_size + burn_in) {
-            rlang::abort(
-                glue::glue(
-                    'Cannot sample a total of {resample_size + burn_in} rows',
-                    ' from a maximum of {l_n} rows.'
-                )
-            )
-        } else if (0.6 * l_n <= resample_size + burn_in) {
-            rlang::inform(
-                glue::glue(
-                    '{resample_size + burn_in} rows will be resampled from',
-                    ' {l_n} rows. Consider reducing `resample_size` or ',
-                    ' `burn_in` to control overlap.'
-                )
-            )
-        }
         .resid <- rlang::sym(".resid")
         n <- vctrs::vec_size(data)
         .outcome <- smpspltools::extract_outcome(object, ...)
@@ -45,7 +25,7 @@ smpspl_boot <-
             function(.) {
                 vctrs::vec_slice(
                     smpspl_resids,
-                    sample(1:n, resample_size + burn_in, replace = FALSE)
+                    sample(1:l_n, l_n, replace = TRUE)
                 )
             }
         ret <-

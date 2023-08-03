@@ -4,16 +4,7 @@
 \alias{smpspl_boot}
 \title{Bootstrapped Sample Split Residuals}
 \usage{
-smpspl_boot(
-  object,
-  data,
-  f_n,
-  l_n,
-  num_resamples,
-  resample_size,
-  burn_in = 200L,
-  ...
-)
+smpspl_boot(object, data, f_n, l_n, num_resamples, ...)
 }
 \arguments{
 \item{object}{An object to fit a time series model to. Implemented models are
@@ -27,11 +18,6 @@ to use when fitting the model.}
 \item{l_n}{positive integer. Number of terms in assessment split.}
 
 \item{num_resamples}{positive integer. Number of bootstrap resamples.}
-
-\item{resample_size}{positive integer. Number of residuals per bootstrap
-resample.}
-
-\item{burn_in}{positive integer. Number of residuals used for burn-in.}
 
 \item{...}{Additional arguments needed to fit the data such as formula.}
 }

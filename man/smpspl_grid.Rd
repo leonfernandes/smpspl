@@ -44,8 +44,8 @@ my_acf <-
              tidy()
      }
 o |>
-     features(.assessment, features = my_acf) |>
-     tidyr::unnest(.assessment) |>
+     features(.resid, .subresid, .assessment, features = my_acf) |>
+     tidyr::unnest(.nested_features) |>
      tidyr::unnest(.features)
 library(dplyr)
 library(parsnip)
@@ -56,7 +56,7 @@ arima_spec <-
      set_engine("arima")
 o2 <- smpspl_grid(arima_spec, data, 2, 2, formula = x ~ date)
 o2 |>
-     features(.assessment, features = my_acf) |>
-     tidyr::unnest(.assessment) |>
+     features(.resid, .subresid, .assessment, features = my_acf) |>
+     tidyr::unnest(.nested_features) |>
      tidyr::unnest(.features)
 }
