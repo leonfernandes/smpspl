@@ -21,15 +21,17 @@ smpspl_boot <-
             vctrs::vec_slice(n - l_n + 1:l_n) |>
             tsibble::new_tsibble(class = "smpspl")
         idx <- tsibble::index(smpspl_resids)
+        p <- progressr::progressor(num_resamples)
         get_new_resids <-
             function(.) {
+                p()
                 vctrs::vec_slice(
                     smpspl_resids,
                     sample(1:l_n, l_n, replace = TRUE)
                 )
             }
         ret <-
-            purrr::map(1:num_resamples, get_new_resids)
+            furrr::future_map(1:num_resamples, get_new_resids)
         ret |>
             purrr::list_rbind(names_to = "boot_id") |>
             tsibble::as_tsibble(index = idx, key = "boot_id") |>

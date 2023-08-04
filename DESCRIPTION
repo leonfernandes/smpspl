@@ -1,6 +1,6 @@
 Package: smpspl
 Title: Sample Splitting
-Version: 0.0.3.9010
+Version: 0.0.3.9011
 Authors@R: 
     person("Leon", "Fernandes", , "leon.fernandes@columbia.edu", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-7192-9939"))
@@ -24,8 +24,10 @@ BugReports: https://github.com/leonfernandes/smpspl/issues
 Imports: 
     autoresid (>= 0.0.2.9021),
     dplyr (>= 1.1.2),
+    furrr (>= 0.3.1),
     glue (>= 1.6.2),
     hardhat (>= 1.3.0),
+    progressr (>= 0.13.0),
     purrr (>= 1.0.1),
     rlang (>= 1.1.1),
     smpspltools (>= 0.0.1.9008),

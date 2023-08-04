@@ -71,6 +71,7 @@ smpspl_grid <-
                 fitted_mdl |>
                     autoresid::autoresid(new_data = data, outcome = .outcome)
             }
+        p <- progressr::progressor(steps = num_analysis * num_assessment)
         nested_mutate <-
             # for each nested .assessment tibble, mutates .subresid tsibble
             function(o) {
@@ -85,9 +86,12 @@ smpspl_grid <-
                                 .x,
                                 .subresid = purrr::map(
                                     assessment_idx,
-                                    \(l_n) vctrs::vec_slice(
-                                        .y, n - l_n + 1:l_n
-                                    )
+                                    \(l_n) {
+                                        p()
+                                        vctrs::vec_slice(
+                                            .y, n - l_n + 1:l_n
+                                        )
+                                    }
                                 )
                             )
                         )
