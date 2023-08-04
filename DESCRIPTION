@@ -10,10 +10,6 @@ License: MIT + file LICENSE
 Suggests: 
     fable (>= 0.3.3),
     fabletools (>= 0.3.3),
-    generics (>= 0.1.3),
-    lanyard (>= 0.0.2.9009),
-    modeltime (>= 1.2.6),
-    parsnip (>= 1.1.0),
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Encoding: UTF-8
@@ -30,7 +26,7 @@ Imports:
     progressr (>= 0.13.0),
     purrr (>= 1.0.1),
     rlang (>= 1.1.1),
-    smpspltools (>= 0.0.1.9008),
+    smpspltools (>= 0.0.1.9010),
     tibble (>= 3.2.1),
     tidyr (>= 1.3.0),
     tsibble (>= 1.1.3),

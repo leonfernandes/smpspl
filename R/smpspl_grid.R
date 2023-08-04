@@ -13,36 +13,12 @@
 #' @examples
 #' library(fable)
 #' library(smpspltools)
-#' library(generics)
 #' data <-
 #'      tsibble::tsibble(x = rnorm(100), date = Sys.Date() + 0:99, index = date)
 #' # Consider an AR(1) model
 #' o <-
 #'      ARIMA(x ~ pdq(1, 0, 0) + PDQ(0, 0, 0)) |>
 #'      smpspl_grid(data, 2, 2)
-#' # Calculate lanyard features
-#' my_acf <-
-#'      function(x) {
-#'          data.frame(t = x, e = 0) |>
-#'              lanyard::acf_metric(t, e) |>
-#'              tidy()
-#'      }
-#' o |>
-#'      features(.resid, .subresid, .assessment, features = my_acf) |>
-#'      tidyr::unnest(.nested_features) |>
-#'      tidyr::unnest(.features)
-#' library(dplyr)
-#' library(parsnip)
-#' library(modeltime)
-#' # Repeat with `modeltime::arima_reg`
-#' arima_spec <-
-#'      arima_reg() |>
-#'      set_engine("arima")
-#' o2 <- smpspl_grid(arima_spec, data, 2, 2, formula = x ~ date)
-#' o2 |>
-#'      features(.resid, .subresid, .assessment, features = my_acf) |>
-#'      tidyr::unnest(.nested_features) |>
-#'      tidyr::unnest(.features)
 smpspl_grid <-
     function(object, data, num_analysis, num_assessment, ...) {
         analysis_idx <- rlang::sym("analysis_idx")

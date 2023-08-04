@@ -13,24 +13,12 @@
 #' @examples
 #' library(fable)
 #' library(smpspltools)
-#' library(generics)
 #' data <-
 #'      tsibble::tsibble(x = rnorm(100), date = Sys.Date() + 0:99, index = date)
 #' # Consider an AR(1) model
 #' o <-
 #'      ARIMA(x ~ pdq(1, 0, 0) + PDQ(0, 0, 0)) |>
 #'      smpspl(data, 50, 100)
-#'
-#' # Calculate lanyard features
-#' my_acf <-
-#'      function(x) {
-#'          data.frame(t = x, e = 0) |>
-#'              lanyard::acf_metric(t, e) |>
-#'              tidy()
-#'      }
-#'
-#' o |>
-#'      features(.resid, features = my_acf)
 smpspl <-
     function(object, data, f_n, l_n, ...) {
         n <- vctrs::vec_size(data)
