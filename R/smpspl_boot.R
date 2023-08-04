@@ -2,9 +2,31 @@
 #'
 #' @inheritParams smpspl
 #' @param num_resamples positive integer. Number of bootstrap resamples.
+#' @importFrom rlang `:=`
 #' @returns a [tsibble][tsibble::tsibble-package] of bootstrap resampled
 #'      residuals.
 #' @export
+#' @examples
+#' \dontrun{
+#' library(fable)
+#' data <-
+#'      tsibble::tsibble(x = rnorm(100), date = Sys.Date() + 0:99, index = date)
+#' # Consider an AR(1) model
+#' o <-
+#'      ARIMA(x ~ pdq(1, 0, 0) + PDQ(0, 0, 0)) |>
+#'      smpspl_boot(data, 50, 100, 100)
+#'
+#' # Calculate lanyard features
+#' my_acf <-
+#'      function(x) {
+#'          data.frame(t = x, e = 0) |>
+#'              lanyard::acf_metric(t, e) |>
+#'              tidy()
+#'      }
+#' library(smpspltools)
+#' o |>
+#'      features(.resid, features = my_acf)
+#' }
 smpspl_boot <-
     function(
         object, data, f_n, l_n, num_resamples, ...
@@ -18,17 +40,20 @@ smpspl_boot <-
         smpspl_resids <-
             mdl |>
             autoresid::autoresid(new_data = data, outcome = .outcome) |>
-            vctrs::vec_slice(n - l_n + 1:l_n) |>
-            tsibble::new_tsibble(class = "smpspl")
-        idx <- tsibble::index(smpspl_resids)
+            tsibble::as_tibble() |>
+            dplyr::select(!!.resid) |>
+            vctrs::vec_slice(n - l_n + 1:l_n)
+        idx <- tsibble::index(data)
         p <- progressr::progressor(num_resamples)
         get_new_resids <-
             function(.) {
                 p()
-                vctrs::vec_slice(
-                    smpspl_resids,
-                    sample(1:l_n, l_n, replace = TRUE)
-                )
+                smpspl_resids |>
+                    vctrs::vec_slice(
+                        sample(1:l_n, l_n, replace = TRUE)
+                    ) |>
+                    dplyr::mutate({{idx}} := Sys.Date() + 1:l_n - 1) |>
+                    tsibble::as_tsibble(index = idx)
             }
         ret <-
             furrr::future_map(1:num_resamples, get_new_resids)

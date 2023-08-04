@@ -20,6 +20,7 @@
 #' o <-
 #'      ARIMA(x ~ pdq(1, 0, 0) + PDQ(0, 0, 0)) |>
 #'      smpspl(data, 50, 100)
+#'
 #' # Calculate lanyard features
 #' my_acf <-
 #'      function(x) {
@@ -27,16 +28,8 @@
 #'              lanyard::acf_metric(t, e) |>
 #'              tidy()
 #'      }
+#'
 #' o |>
-#'      features(.resid, features = my_acf)
-#' library(parsnip)
-#' library(modeltime)
-#' # Repeat with `modeltime::arima_reg`
-#' arima_spec <-
-#'      arima_reg() |>
-#'      set_engine("arima")
-#' o2 <- smpspl(arima_spec, data, 50, 100, formula = x ~ date)
-#' o2 |>
 #'      features(.resid, features = my_acf)
 smpspl <-
     function(object, data, f_n, l_n, ...) {
