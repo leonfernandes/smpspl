@@ -2,6 +2,7 @@
 #'
 #' @inheritParams smpspl
 #' @param num_resamples positive integer. Number of bootstrap resamples.
+#' @inheritParams furrr::future_map
 #' @importFrom rlang `:=`
 #' @returns a [tsibble][tsibble::tsibble-package] of bootstrap resampled
 #'      residuals.
@@ -16,7 +17,8 @@
 #'      smpspl_boot(data, 50, 100, 20)
 smpspl_boot <-
     function(
-        object, data, f_n, l_n, num_resamples, ...
+        object, data, f_n, l_n, num_resamples,
+        .options = furrr::furrr_options(), ...
     ) {
         .resid <- rlang::sym(".resid")
         n <- vctrs::vec_size(data)
@@ -42,8 +44,10 @@ smpspl_boot <-
                     dplyr::mutate({{idx}} := Sys.Date() + 1:l_n - 1) |>
                     tsibble::as_tsibble(index = idx)
             }
+        my_crt <-
+            carrier::crate(~ get_new_resids(.x))
         ret <-
-            furrr::future_map(1:num_resamples, get_new_resids)
+            furrr::future_map(1:num_resamples, my_crt, .options = .options)
         ret |>
             purrr::list_rbind(names_to = "boot_id") |>
             tsibble::as_tsibble(index = idx, key = "boot_id") |>

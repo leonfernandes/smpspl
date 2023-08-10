@@ -4,7 +4,15 @@
 \alias{smpspl_boot}
 \title{Bootstrapped Sample Split Residuals}
 \usage{
-smpspl_boot(object, data, f_n, l_n, num_resamples, ...)
+smpspl_boot(
+  object,
+  data,
+  f_n,
+  l_n,
+  num_resamples,
+  .options = furrr::furrr_options(),
+  ...
+)
 }
 \arguments{
 \item{object}{An object to fit a time series model to. Implemented models are
@@ -18,6 +26,9 @@ to use when fitting the model.}
 \item{l_n}{positive integer. Number of terms in assessment split.}
 
 \item{num_resamples}{positive integer. Number of bootstrap resamples.}
+
+\item{.options}{The \code{future} specific options to use with the workers. This
+must be the result from a call to \code{\link[furrr:furrr_options]{furrr_options()}}.}
 
 \item{...}{Additional arguments needed to fit the data such as formula.}
 }
