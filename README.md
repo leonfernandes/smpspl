@@ -15,13 +15,11 @@ The goal of `smpspl` is to perform sample splitting. Time series data
 are inherently ordered with the time index which means standard sampling
 schemes that randomly split the data are inapplicable. We propose a
 sample splitting paradigm where goodness-of-fit tests can be performed
-based on a sample splitting approach where the first
-![f\_n](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;f_n
-"f_n") terms are used for estimating the model and the last
-![l\_n](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;l_n
-"l_n") terms are used for obtaining the resiudals. Doing so, under
-certain circumstances, yields residuals that behave like the true noise
-process and inference on the appropriateness of a model can be made.
+based on a sample splitting approach where the first `f_n` terms are
+used for estimating the model and the last `l_n` terms are used for
+obtaining the resiudals. Doing so, under certain circumstances, yields
+residuals that behave like the true noise process and inference on the
+appropriateness of a model can be made.
 
 ## Installation
 
