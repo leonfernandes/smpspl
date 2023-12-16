@@ -26,6 +26,7 @@ smpspl_grid <-
         .resid <- rlang::sym(".resid")
         .assessment <- rlang::sym(".assessment")
         assessment_idx <- rlang::sym("assessment_idx")
+        keep <- rlang::sym("keep")
         n <- vctrs::vec_size(data)
         settings_tbl <-
             # get tibble of sample splitting settings
@@ -35,15 +36,20 @@ smpspl_grid <-
         estimate_fn <-
             # returns fitted model for aa given number of terms
             function(f_n) {
-                smpspltools::fit_model(
-                    .object = object, .data = vctrs::vec_slice(data, 1:f_n),
-                    ... = ...
+                try(
+                    smpspltools::fit_model(
+                        .object = object, .data = vctrs::vec_slice(data, 1:f_n),
+                        ... = ...
+                    )
                 )
             }
         .outcome <- smpspltools::extract_outcome(object, ...)
         autoresid_fn <-
             # returns full residuals applied based on `data` for a fitted model
             function(fitted_mdl) {
+                if (inherits(fitted_mdl, "try-error")) {
+                    return(NA)
+                }
                 fitted_mdl |>
                     autoresid::autoresid(new_data = data, outcome = .outcome)
             }
@@ -78,8 +84,14 @@ smpspl_grid <-
             # fit models on `analysis_idx` and calculate residuals on all data
             dplyr::mutate(
                 .fit = purrr::map(analysis_idx, estimate_fn),
+                keep = purrr::map_lgl(.fit, \(.) !inherits(., "try-error"))
+            ) |>
+            dplyr::filter(keep) |>
+            dplyr::select(-keep) |>
+            dplyr::mutate(
                 .resid = purrr::map(.fit, autoresid_fn)
             ) |>
+            dplyr::filter(!inherits(.fit, "try-error")) |>
             # for each sample split get residuals
             nested_mutate() |>
             tibble::new_tibble(class = "smpspl_grid")
