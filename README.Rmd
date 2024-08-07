@@ -40,7 +40,6 @@ The main function is `smpspl` which fits a model on the first `f_n` terms of the
 library(smpspl)
 library(fable)
 library(tsibble)
-library(smpspltools)
 library(dplyr)
 # Generate AR(1) data
 data <-

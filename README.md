@@ -44,7 +44,6 @@ library(tsibble)
 #> The following objects are masked from 'package:base':
 #> 
 #>     intersect, setdiff, union
-library(smpspltools)
 library(dplyr)
 #> 
 #> Attaching package: 'dplyr'
