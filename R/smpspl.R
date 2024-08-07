@@ -12,7 +12,7 @@
 #' @return a [tsibble][tsibble::tsibble-package] of class "smpspl".
 #' @examples
 #' library(fable)
-#' library(smpspltools)
+#' library(tsibble)
 #' data <-
 #'      tsibble::tsibble(x = rnorm(100), date = Sys.Date() + 0:99, index = date)
 #' # Consider an AR(1) model
