@@ -23,7 +23,7 @@ smpspl_grid <-
     function(object, data, num_analysis, num_assessment, ...) {
         analysis_idx <- rlang::sym("analysis_idx")
         .fit <- rlang::sym(".fit")
-        .resid <- rlang::sym(".resid")
+        inn_sym <- rlang::sym("inn")
         .assessment <- rlang::sym(".assessment")
         assessment_idx <- rlang::sym("assessment_idx")
         keep <- rlang::sym("keep")
@@ -43,7 +43,6 @@ smpspl_grid <-
                     )
                 )
             }
-        .outcome <- smpspltools::extract_outcome(object, ...)
         autoresid_fn <-
             # returns full residuals applied based on `data` for a fitted model
             function(fitted_mdl) {
@@ -51,7 +50,7 @@ smpspl_grid <-
                     return(NA)
                 }
                 fitted_mdl |>
-                    autoresid::autoresid(new_data = data, outcome = .outcome)
+                    rcits::ts2inn(ts = data)
             }
         p <- progressr::progressor(steps = num_analysis * num_assessment)
         nested_mutate <-
@@ -62,9 +61,9 @@ smpspl_grid <-
                         # mutate to replace .assessment column
                         .assessment = purrr::map2(
                             .assessment,
-                            .resid,
+                            inn_sym,
                             ~ dplyr::mutate(
-                                # subset .resid according to assessment_idx
+                                # subset inn_sym according to assessment_idx
                                 .x,
                                 .subresid = purrr::map(
                                     assessment_idx,
@@ -89,7 +88,7 @@ smpspl_grid <-
             dplyr::filter(keep) |>
             dplyr::select(-keep) |>
             dplyr::mutate(
-                .resid = purrr::map(.fit, autoresid_fn)
+                inn_sym = purrr::map(.fit, autoresid_fn)
             ) |>
             dplyr::filter(!inherits(.fit, "try-error")) |>
             # for each sample split get residuals

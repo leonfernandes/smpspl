@@ -22,13 +22,12 @@
 smpspl <-
     function(object, data, f_n, l_n, ...) {
         n <- vctrs::vec_size(data)
-        .outcome <- smpspltools::extract_outcome(object, ...)
         mdl <-
             object |>
             smpspltools::fit_model(.data = vctrs::vec_slice(data, 1:f_n), ...)
         smpspl_resids <-
             mdl |>
-            autoresid::autoresid(new_data = data, outcome = .outcome) |>
+            rcits::ts2inn(ts = data) |>
             vctrs::vec_slice(n - l_n + 1L:l_n) |>
             tsibble::new_tsibble(class = "smpspl")
         return(smpspl_resids)

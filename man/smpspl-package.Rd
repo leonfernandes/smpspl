@@ -3,7 +3,6 @@
 \docType{package}
 \name{smpspl-package}
 \alias{smpspl-package}
-\alias{_PACKAGE}
 \title{smpspl: Sample Splitting}
 \description{
 Provides functions that perform sample splitting as described in upcoming manuscript.

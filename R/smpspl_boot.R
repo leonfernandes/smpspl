@@ -21,17 +21,16 @@ smpspl_boot <-
         object, data, f_n, l_n, num_resamples,
         .options = furrr::furrr_options(), ...
     ) {
-        .resid <- rlang::sym(".resid")
+        inn_sym <- rlang::sym("inn")
         n <- vctrs::vec_size(data)
-        .outcome <- smpspltools::extract_outcome(object, ...)
         mdl <-
             object |>
             smpspltools::fit_model(.data = vctrs::vec_slice(data, 1:f_n), ...)
         smpspl_resids <-
             mdl |>
-            autoresid::autoresid(new_data = data, outcome = .outcome) |>
+            rcits::ts2inn(ts = data) |>
             tsibble::as_tibble() |>
-            dplyr::select(!!.resid) |>
+            dplyr::select(!!inn_sym) |>
             vctrs::vec_slice(n - l_n + 1:l_n)
         idx <- tsibble::index(data)
         p <- progressr::progressor(num_resamples)
